@@ -157,9 +157,9 @@ PROGMEM static prog_uchar
   Rcmd1[] = {                 // Init for 7735R, part 1 (red or green tab)
     15,                       // 15 commands in list:
     ST7735_SWRESET,   DELAY,  //  1: Software reset, 0 args, w/delay
-      150,                    //     150 ms delay
+      100,                    //     150 ms delay
     ST7735_SLPOUT ,   DELAY,  //  2: Out of sleep mode, 0 args, w/delay
-      255,                    //     500 ms delay
+      10,                    //     500 ms delay
     ST7735_FRMCTR1, 3      ,  //  3: Frame rate ctrl - normal mode, 3 args:
       0x01, 0x2C, 0x2D,       //     Rate = fosc/(1x2+40) * (LINE+2C+2D)
     ST7735_FRMCTR2, 3      ,  //  4: Frame rate control - idle mode, 3 args:
@@ -223,7 +223,7 @@ PROGMEM static prog_uchar
     ST7735_NORON  ,    DELAY, //  3: Normal display on, no args, w/delay
       10,                     //     10 ms delay
     ST7735_DISPON ,    DELAY, //  4: Main screen turn on, no args w/delay
-      100 };                  //     100 ms delay
+      1 };                  //     100 ms delay
 
 
 // Companion code to the above tables.  Reads and issues
@@ -267,7 +267,7 @@ void Adafruit_ST7735::commonInit(uint8_t *cmdList) {
 
   if(hwSPI) { // Using hardware SPI
     SPI.begin();
-    SPI.setClockDivider(SPI_CLOCK_DIV4); // 4 MHz (half speed)
+    SPI.setClockDivider(SPI_CLOCK_DIV2); // 8 MHz (full speed)
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE0);
   } else {
@@ -286,11 +286,11 @@ void Adafruit_ST7735::commonInit(uint8_t *cmdList) {
   if (_rst) {
     pinMode(_rst, OUTPUT);
     digitalWrite(_rst, HIGH);
-    delay(500);
+    delay(50);
     digitalWrite(_rst, LOW);
-    delay(500);
+    delay(50);
     digitalWrite(_rst, HIGH);
-    delay(500);
+    delay(50);
   }
 
   if(cmdList) commandList(cmdList);
